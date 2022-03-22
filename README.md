@@ -168,3 +168,15 @@ Sample commands and outputs:
   },
 # etc.
 ```
+
+## Closing the Program
+
+Make sure to end the application when you're finished with it via the following two commands:
+
+```
+   make stop
+   make rm
+
+   docker stop geovbra_iss
+   docker rm geovbra_iss
+```
