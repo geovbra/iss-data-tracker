@@ -1,5 +1,9 @@
 from flask import Flask, jsonify
 import xmltodict
+import logging
+import socket
+format_str=f'[%(asctime)s {socket.gethostname()}] %(filename)s:%(funcName)s:%(lineno)s - %(levelname)s: %(message)s'
+logging.basicConfig(level=logging.DEBUG, format=format_str)
 
 app = Flask(__name__)
 
@@ -66,6 +70,8 @@ def help() -> str:
         A string representing the routes used to load and navigate through the positional and sighting data.
     '''
 
+    logging.info('returning all routes')
+
     return '\n    ISS TRACKER\n\n\
     Informational and management routes:\n\n\
     /                                                            (GET) print this information\n\
@@ -90,6 +96,8 @@ def all_epochs() -> str:
         A string representing the list of epochs whose data can be displayed.
     '''
 
+    logging.info('returning all epochs')
+
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
     return all_key_values(iss_epoch_data['ndm']['oem']['body']['segment']['data']['stateVector'], 'EPOCH')
@@ -106,6 +114,8 @@ def epoch_data(epoch: str) -> str:
         A string representing the data dictionary associated with the epoch.
     '''
 
+    logging.info(f'returning epoch {epoch}')
+
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
     return all_key_value_data(iss_epoch_data['ndm']['oem']['body']['segment']['data']['stateVector'], 'EPOCH', epoch)
@@ -118,6 +128,8 @@ def all_countries() -> str:
     Returns:
         A string representing the list of countries whose data can be displayed.
     '''
+
+    logging.info('returning all countries')
 
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
@@ -135,6 +147,8 @@ def country_data(country: str) -> str:
         A string representing the list of data dictionaries associated with the country.
     '''
 
+    logging.info(f'returning data for {country}')
+
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
     return all_key_value_data(iss_sighting_data['visible_passes']['visible_pass'], 'country', country)
@@ -150,6 +164,8 @@ def all_regions(country: str) -> str:
     Returns:
         A string representing the list of regions in a country whose data can be displayed.
     '''
+
+    logging.info(f'returning all regions in {country}')
 
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
@@ -172,6 +188,8 @@ def region_data(country: str, region: str) -> str:
         A string representing the list of data dictionaries associated with the region.
     '''
 
+    logging.info(f'returning data for {region}')
+
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
     country_sightings = []
@@ -192,6 +210,8 @@ def all_cities(country: str, region: str) -> str:
     Returns:
         A string representing the list of cities in a region whose data can be displayed.
     '''
+
+    logging.info(f'returning all cities in {region}')
 
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
@@ -214,6 +234,8 @@ def city_data(country: str, region: str, city: str) -> str:
     Returns:
         A string representing the list of data dictionaries associated with the city.
     '''
+
+    logging.info(f'returning data for {city}')
 
     if not is_data_loaded():
         return 'WARNING: Data not loaded into memory, use a POST request to the route /load\n'
@@ -242,6 +264,8 @@ def load() -> str:
     Returns:
         A string representing the successful operation of loading data into the global variables.
     '''
+    logging.info('loading data')
+
 
     global iss_epoch_data
     global iss_sighting_data
