@@ -6,6 +6,9 @@ all: build run push
 images:
 	docker images | grep ${NAME}
 
+pull:
+	docker pull geovbra/flask_iss_tracker:1.0
+
 ps:
 	docker ps -a | grep ${NAME}
 
