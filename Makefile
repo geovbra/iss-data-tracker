@@ -1,8 +1,6 @@
 NAME ?= geovbra
 PORT ?= 5005
 
-all: pull build run push
-
 images:
 	docker images | grep ${NAME}
 
